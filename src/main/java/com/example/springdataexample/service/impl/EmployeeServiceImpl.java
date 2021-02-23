@@ -9,6 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * @author rishi
  */
@@ -35,6 +37,58 @@ public class EmployeeServiceImpl
 
 
     return responseDto;
+  }
+
+  @Override
+  public EmployeeResponseDto getEmployeeById(Long id) {
+    Optional<Employee> employeeOptional = employeeRepository.findById(id);
+    if (employeeOptional.isPresent()){
+
+      // copy from employee to response dto
+      EmployeeResponseDto responseDto = new EmployeeResponseDto();
+      BeanUtils.copyProperties(employeeOptional.get(), responseDto);
+
+      return responseDto;
+    }
+    return null;
+  }
+
+  @Override
+  public EmployeeResponseDto updateEmployeeById(Long id, EmployeeRequestDto employeeRequestDto) {
+    Optional<Employee> employeeOptional = employeeRepository.findById(id);
+    if (employeeOptional.isPresent()){
+      //update employee
+      Employee employeeFromDb = employeeOptional.get();
+      employeeFromDb.setName(employeeRequestDto.getName());
+      employeeFromDb.setDepartmentName(employeeRequestDto.getDepartmentName());
+
+      //save to db
+      Employee savedEmployee = employeeRepository.save(employeeFromDb);
+
+      //copy from employee to response dto
+      EmployeeResponseDto responseDto = new EmployeeResponseDto();
+      BeanUtils.copyProperties(savedEmployee, responseDto);
+
+      return responseDto;
+    }
+    return null;
+  }
+
+  @Override
+  public EmployeeResponseDto deleteEmployeeById(Long id) {
+    Optional<Employee> employeeOptional = employeeRepository.findById(id);
+    if (employeeOptional.isPresent()){
+      Employee employeeFromDb = employeeOptional.get();
+
+      //delete employee from db
+      employeeRepository.delete(employeeFromDb);
+
+      EmployeeResponseDto responseDto = new EmployeeResponseDto();
+      BeanUtils.copyProperties(employeeFromDb, responseDto);
+
+      return responseDto;
+    }
+    return null;
   }
 
 }
