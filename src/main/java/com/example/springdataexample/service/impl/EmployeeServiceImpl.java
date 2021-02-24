@@ -1,8 +1,11 @@
 package com.example.springdataexample.service.impl;
 
+import com.example.springdataexample.dto.DepartmentResponseDto;
 import com.example.springdataexample.dto.EmployeeRequestDto;
 import com.example.springdataexample.dto.EmployeeResponseDto;
+import com.example.springdataexample.entity.Department;
 import com.example.springdataexample.entity.Employee;
+import com.example.springdataexample.repository.DepartmentRepository;
 import com.example.springdataexample.repository.EmployeeRepository;
 import com.example.springdataexample.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +23,8 @@ public class EmployeeServiceImpl
 
   @Autowired
   private EmployeeRepository employeeRepository;
+  @Autowired
+  private DepartmentRepository departmentRepository;
 
   @Override
   public EmployeeResponseDto createEmployee(EmployeeRequestDto employeeRequestDto) {
@@ -28,6 +33,17 @@ public class EmployeeServiceImpl
     //copy fields from dto to employee
     BeanUtils.copyProperties(employeeRequestDto, employee);
 
+    //fetch department from db
+    Optional<Department> departmentOptional =
+        departmentRepository.findById(employeeRequestDto.getDepartment().getId());
+    if (departmentOptional.isPresent()){
+      employee.setDepartment(departmentOptional.get());
+    }else {
+      Department department = new Department();
+      department.setName(employeeRequestDto.getDepartment().getName());
+      employee.setDepartment(department);
+    }
+
     //save employee to db
     Employee savedEmployee = employeeRepository.save(employee);
 
@@ -35,6 +51,7 @@ public class EmployeeServiceImpl
     EmployeeResponseDto responseDto = new EmployeeResponseDto();
     BeanUtils.copyProperties(savedEmployee, responseDto);
 
+    responseDto.setDepartmentFromEntity(employee.getDepartment());
 
     return responseDto;
   }
@@ -47,7 +64,7 @@ public class EmployeeServiceImpl
       // copy from employee to response dto
       EmployeeResponseDto responseDto = new EmployeeResponseDto();
       BeanUtils.copyProperties(employeeOptional.get(), responseDto);
-
+      responseDto.setDepartmentFromEntity(employeeOptional.get().getDepartment());
       return responseDto;
     }
     return null;
@@ -60,7 +77,17 @@ public class EmployeeServiceImpl
       //update employee
       Employee employeeFromDb = employeeOptional.get();
       employeeFromDb.setName(employeeRequestDto.getName());
-      employeeFromDb.setDepartmentName(employeeRequestDto.getDepartmentName());
+
+      //fetch department from db
+      Optional<Department> departmentOptional =
+          departmentRepository.findById(employeeRequestDto.getDepartment().getId());
+      if (departmentOptional.isPresent()){
+        employeeFromDb.setDepartment(departmentOptional.get());
+      }else {
+        Department department = new Department();
+        department.setName(employeeRequestDto.getDepartment().getName());
+        employeeFromDb.setDepartment(department);
+      }
 
       //save to db
       Employee savedEmployee = employeeRepository.save(employeeFromDb);
@@ -68,6 +95,8 @@ public class EmployeeServiceImpl
       //copy from employee to response dto
       EmployeeResponseDto responseDto = new EmployeeResponseDto();
       BeanUtils.copyProperties(savedEmployee, responseDto);
+
+      responseDto.setDepartmentFromEntity(savedEmployee.getDepartment());
 
       return responseDto;
     }
@@ -86,6 +115,7 @@ public class EmployeeServiceImpl
       EmployeeResponseDto responseDto = new EmployeeResponseDto();
       BeanUtils.copyProperties(employeeFromDb, responseDto);
 
+      responseDto.setDepartmentFromEntity(employeeFromDb.getDepartment());
       return responseDto;
     }
     return null;

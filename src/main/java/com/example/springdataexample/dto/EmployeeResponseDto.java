@@ -1,5 +1,6 @@
 package com.example.springdataexample.dto;
 
+import com.example.springdataexample.entity.Department;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,13 @@ public class EmployeeResponseDto {
 
   private String name;
 
-  private String departmentName;
+  private DepartmentResponseDto department;
+
+  public void setDepartmentFromEntity(Department departmentEntity){
+    DepartmentResponseDto departmentResponseDto = new DepartmentResponseDto();
+    departmentResponseDto.setId(departmentEntity.getId());
+    departmentResponseDto.setName(departmentEntity.getName());
+    this.department = departmentResponseDto;
+  }
 
 }
