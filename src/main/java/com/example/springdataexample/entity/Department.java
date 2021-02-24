@@ -7,9 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import java.util.List;
 
 /**
  * @author rishi
@@ -25,7 +22,7 @@ public class Department {
 
   private String name;
 
-  @JoinColumn(referencedColumnName = "id", name = "department_id")
-  @OneToMany
-  List<Employee> employeeList;
+  //  @JoinColumn(referencedColumnName = "id", name = "department_id")
+  //  @OneToMany
+  //  List<Employee> employeeList;
 }

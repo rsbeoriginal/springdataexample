@@ -15,6 +15,8 @@ public class EmployeeResponseDto {
 
   private String name;
 
+  private String code;
+
   private DepartmentResponseDto department;
 
   public void setDepartmentFromEntity(Department departmentEntity){
