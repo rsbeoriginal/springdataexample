@@ -12,6 +12,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -119,6 +121,20 @@ public class EmployeeServiceImpl
       return responseDto;
     }
     return null;
+  }
+
+  @Override
+  public List<EmployeeResponseDto> getEmployeeListByDepartment(Long departmentId) {
+    Department department = departmentRepository.findById(departmentId).get();
+    List<Employee> employeeList = employeeRepository.findByDepartment(department);
+    List<EmployeeResponseDto> employeeResponseDtoList = new ArrayList<>();
+    for (Employee employee : employeeList){
+      EmployeeResponseDto responseDto = new EmployeeResponseDto();
+      BeanUtils.copyProperties(employee, responseDto);
+      responseDto.setDepartmentFromEntity(employee.getDepartment());
+      employeeResponseDtoList.add(responseDto);
+    }
+    return employeeResponseDtoList;
   }
 
 }

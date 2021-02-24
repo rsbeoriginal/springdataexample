@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author rishi
  */
@@ -49,5 +51,12 @@ public class EmployeeController {
   @DeleteMapping("/{id}")
   public EmployeeResponseDto deleteEmployeeById(@PathVariable("id") Long id){
     return employeeService.deleteEmployeeById(id);
+  }
+
+  //GET - /employee/department/{id}
+  @GetMapping("/department/{id}")
+  public List<EmployeeResponseDto> getEmployeeListByDepartment(
+      @PathVariable("id") Long departmentId) {
+    return employeeService.getEmployeeListByDepartment(departmentId);
   }
 }
