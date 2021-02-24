@@ -10,6 +10,7 @@ import com.example.springdataexample.service.DepartmentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class DepartmentServiceImpl implements DepartmentService {
   }
 
   @Override
+  @Transactional
   public DepartmentResponseDto updateDepartment(Long departmentId,
       DepartmentRequestDto departmentRequestDto) {
     Department department = departmentRepository.findById(departmentId).get();
