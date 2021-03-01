@@ -19,6 +19,8 @@ public class EmployeeResponseDto {
 
   private DepartmentResponseDto department;
 
+  private Integer yearsOfExperience;
+
   public void setDepartmentFromEntity(Department departmentEntity){
     DepartmentResponseDto departmentResponseDto = new DepartmentResponseDto();
     departmentResponseDto.setId(departmentEntity.getId());

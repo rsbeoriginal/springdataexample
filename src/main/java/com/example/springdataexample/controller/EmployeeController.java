@@ -59,4 +59,9 @@ public class EmployeeController {
       @PathVariable("id") Long departmentId) {
     return employeeService.getEmployeeListByDepartment(departmentId);
   }
+
+  @GetMapping("/mostExperienced")
+  public List<EmployeeResponseDto> getMostExperiencedEmployeeList(){
+    return employeeService.getMostExperiencedEmployeeList();
+  }
 }

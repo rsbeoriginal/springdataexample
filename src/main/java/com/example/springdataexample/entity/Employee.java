@@ -33,4 +33,6 @@ public class Employee {
   @JsonBackReference
   private Department department;
 
+  private Integer yearsOfExperience;
+
 }

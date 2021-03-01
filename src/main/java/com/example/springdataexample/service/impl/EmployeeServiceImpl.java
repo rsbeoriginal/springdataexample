@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author rishi
@@ -140,6 +141,23 @@ public class EmployeeServiceImpl
       employeeResponseDtoList.add(responseDto);
     }
     return employeeResponseDtoList;
+  }
+
+  @Override
+  public List<EmployeeResponseDto> getMostExperiencedEmployeeList() {
+    List<Employee> employeeList = employeeRepository.getMostExperiencedEmployeeList();
+    return getEmployeeResponseDtoListFromEmployeeList(employeeList);
+  }
+
+  private List<EmployeeResponseDto> getEmployeeResponseDtoListFromEmployeeList(
+      List<Employee> employeeList) {
+    return employeeList.stream()
+        .map(employee -> {
+              EmployeeResponseDto responseDto = new EmployeeResponseDto();
+              BeanUtils.copyProperties(employee, responseDto);
+              responseDto.setDepartmentFromEntity(employee.getDepartment());
+              return responseDto;
+    }).collect(Collectors.toList());
   }
 
 }

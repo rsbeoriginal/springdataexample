@@ -36,4 +36,10 @@ public interface EmployeeRepository
          nativeQuery = true)
   List<Employee> getEmployeeListByNativeQuery(Long departmentId);
 
+  @Query("FROM Employee e WHERE e.yearsOfExperience = (SELECT max(emp1.yearsOfExperience) FROM Employee emp1)")
+  List<Employee> getMostExperiencedEmployeeList();
+
+  @Query("FROM Employee e WHERE e.department.id = ?1 AND "
+             + "e.yearsOfExperience = (SELECT max(emp1.yearsOfExperience) FROM Employee emp1 WHERE emp1.department.id = ?1)")
+  List<Employee> getMostExperiencedEmployeeListInDepartment(Long departmentId);
 }
