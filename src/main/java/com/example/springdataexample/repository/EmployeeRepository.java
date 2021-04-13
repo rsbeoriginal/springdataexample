@@ -29,6 +29,11 @@ public interface EmployeeRepository
     //  @Query("FROM Employee e WHERE e.department.id = ?1")
   List<Employee> getEmployeeListByDepartmentIdParam(@Param("departmentId") Long departmentId);
 
+  @Query("SELECT e FROM Employee e WHERE ( (:departmentId IS NULL AND e.department.id IS NOT NULL ) "
+             + "OR (:departmentId IS NOT NULL AND e.department.id = :departmentId) )")
+    //  @Query("FROM Employee e WHERE e.department.id = ?1")
+  List<Employee> getEmployeeListByDepartmentIdParam_alsoNull(@Param("departmentId") Long departmentId);
+
 
   //by native query
 
